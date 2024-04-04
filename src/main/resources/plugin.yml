@@ -1,0 +1,15 @@
+name: CustomItems
+version: '${project.version}'
+main: me.dragoneisbaer.minecraft.customitems.CustomItems
+api-version: '1.20'
+load: STARTUP
+commands:
+  emeraldarmor:
+    description: Gets you the Emerald Armor.
+    usage: /<command>
+  firearmor:
+    description: Gets you the Fire Armor.
+    usage: /<command>
+  waterarmor:
+    description: Gets you the Water Armor.
+    usage: /<command>
