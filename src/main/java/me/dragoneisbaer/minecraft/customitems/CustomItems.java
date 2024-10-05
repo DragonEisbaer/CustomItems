@@ -9,6 +9,7 @@ import me.dragoneisbaer.minecraft.customitems.listener.FeuerArmorEffekt;
 import me.dragoneisbaer.minecraft.customitems.listener.WasserArmorEffekt;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -16,6 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
@@ -35,6 +37,7 @@ public final class CustomItems extends JavaPlugin {
         loadEmeraldArmor();
         loadFireArmor();
         loadWaterArmor();
+        loadLightArmor();
         getServer().getPluginManager().registerEvents(new EmeraldArmorEffekt(), this);
         getServer().getPluginManager().registerEvents(new FeuerArmorEffekt(), this);
         getServer().getPluginManager().registerEvents(new WasserArmorEffekt(), this);
@@ -305,5 +308,100 @@ public final class CustomItems extends JavaPlugin {
         Bukkit.addRecipe(waterleggings);
         Bukkit.addRecipe(waterboots);
     }
+    public void loadLightArmor() {
+        ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
+        ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE);
+        ItemStack leggings = new ItemStack(Material.LEATHER_LEGGINGS);
+        ItemStack helmet = new ItemStack(Material.PLAYER_HEAD);
 
+        LeatherArmorMeta bootmeta = (LeatherArmorMeta) boots.getItemMeta();
+        LeatherArmorMeta chestplatemeta = (LeatherArmorMeta) chestplate.getItemMeta();
+        LeatherArmorMeta leggingsmeta = (LeatherArmorMeta) leggings.getItemMeta();
+        SkullMeta helmetmeta = (SkullMeta) helmet.getItemMeta();
+
+        bootmeta.setColor(Color.BLUE);
+        chestplatemeta.setColor(Color.BLUE);
+        leggingsmeta.setColor(Color.BLUE);
+        helmetmeta.setOwner("21Stefage");
+
+        helmetmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 6, true);
+        chestplatemeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 6, true);
+        bootmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 6, true);
+        leggingsmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 6, true);
+
+        leggingsmeta.addEnchant(Enchantment.LUCK, 1, true);
+        helmetmeta.addEnchant(Enchantment.LUCK, 1, true);
+        chestplatemeta.addEnchant(Enchantment.LUCK, 1, true);
+        bootmeta.addEnchant(Enchantment.LUCK, 1, true);
+
+        bootmeta.addEnchant(Enchantment.DEPTH_STRIDER, 3, true);
+
+        chestplatemeta.setUnbreakable(true);
+        helmetmeta.setUnbreakable(true);
+        bootmeta.setUnbreakable(true);
+        leggingsmeta.setUnbreakable(true);
+
+        leggingsmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        helmetmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        chestplatemeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        bootmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+
+        bootmeta.setDisplayName(ChatColor.BLUE + "Water Boots");
+        chestplatemeta.setDisplayName(ChatColor.BLUE + "Water Chestplate");
+        leggingsmeta.setDisplayName(ChatColor.BLUE + "Water Leggings");
+        helmetmeta.setDisplayName(ChatColor.BLUE + "Water Helmet");
+
+        ArrayList<String> armorlore = new ArrayList<>();
+        armorlore.add("Aquaman!");
+        armorlore.add("Level: 1");
+        armorlore.add("Exp: 0");
+
+        bootmeta.setLore(armorlore);
+        chestplatemeta.setLore(armorlore);
+        leggingsmeta.setLore(armorlore);
+        helmetmeta.setLore(armorlore);
+
+        boots.setItemMeta(bootmeta);
+        chestplate.setItemMeta(chestplatemeta);
+        leggings.setItemMeta(leggingsmeta);
+        helmet.setItemMeta(helmetmeta);
+
+        NamespacedKey helmetkey = new NamespacedKey(this, "water_helmet");
+        NamespacedKey chestplatekey = new NamespacedKey(this, "water_chestplate");
+        NamespacedKey leggingskey = new NamespacedKey(this, "water_leggings");
+        NamespacedKey bootskey = new NamespacedKey(this, "water_boots");
+
+        // Create our custom recipe variable
+        ShapedRecipe waterhelmet = new ShapedRecipe(helmetkey, helmet);
+        ShapedRecipe waterchestplate = new ShapedRecipe(chestplatekey, chestplate);
+        ShapedRecipe waterleggings = new ShapedRecipe(leggingskey, leggings);
+        ShapedRecipe waterboots = new ShapedRecipe(bootskey, boots);
+
+        ItemStack bottle = new ItemStack(Material.POTION, 1);
+        ItemMeta meta = bottle.getItemMeta();
+        PotionMeta pmeta = (PotionMeta) meta;
+        PotionData pdata = new PotionData(PotionType.WATER);
+        pmeta.setBasePotionData(pdata);
+        bottle.setItemMeta(meta);
+
+        waterhelmet.shape("WWW", "W W", "   ");
+        waterchestplate.shape("W W", "WHW", "WWW");
+        waterleggings.shape("WWW", "W W", "W W");
+        waterboots.shape("   ", "W W", "H H");
+
+        waterhelmet.setIngredient('W', bottle);
+
+        waterchestplate.setIngredient('W', bottle);
+        waterchestplate.setIngredient('H', Material.HEART_OF_THE_SEA);
+
+        waterleggings.setIngredient('W', bottle);
+
+        waterboots.setIngredient('W', bottle);
+        waterboots.setIngredient('H', Material.HEART_OF_THE_SEA);
+
+        Bukkit.addRecipe(waterhelmet);
+        Bukkit.addRecipe(waterchestplate);
+        Bukkit.addRecipe(waterleggings);
+        Bukkit.addRecipe(waterboots);
+    }
 }
