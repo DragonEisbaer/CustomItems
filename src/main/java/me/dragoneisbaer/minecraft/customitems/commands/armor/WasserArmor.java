@@ -10,13 +10,15 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class WasserArmor implements CommandExecutor {
+public class WasserArmor extends ArmorTemplate implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -26,67 +28,16 @@ public class WasserArmor implements CommandExecutor {
             Player player = (Player) sender;
             if (player.hasPermission("customitems.getwaterarmor")) {
                 if (args.length == 0) {
-                    ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
-                    ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE);
-                    ItemStack leggings = new ItemStack(Material.LEATHER_LEGGINGS);
-                    ItemStack helmet = new ItemStack(Material.PLAYER_HEAD);
 
-                    LeatherArmorMeta bootmeta = (LeatherArmorMeta) boots.getItemMeta();
-                    LeatherArmorMeta chestplatemeta = (LeatherArmorMeta) chestplate.getItemMeta();
-                    LeatherArmorMeta leggingsmeta = (LeatherArmorMeta) leggings.getItemMeta();
-                    SkullMeta helmetmeta = (SkullMeta) helmet.getItemMeta();
+                    ArmorBuilder armorbuilder = new ArmorBuilder();
+                    armorbuilder.setMeta(this);
 
-                    bootmeta.setColor(Color.BLUE);
-                    chestplatemeta.setColor(Color.BLUE);
-                    leggingsmeta.setColor(Color.BLUE);
-                    helmetmeta.setOwner("21Stefage");
-
-                    helmetmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 6, true);
-                    chestplatemeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 6, true);
-                    bootmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 6, true);
-                    leggingsmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 6, true);
-
-                    leggingsmeta.addEnchant(Enchantment.LUCK, 1, true);
-                    helmetmeta.addEnchant(Enchantment.LUCK, 1, true);
-                    chestplatemeta.addEnchant(Enchantment.LUCK, 1, true);
-                    bootmeta.addEnchant(Enchantment.LUCK, 1, true);
+                    ItemMeta bootmeta = armorbuilder.getArmor().get("boots").getItemMeta();
 
                     bootmeta.addEnchant(Enchantment.DEPTH_STRIDER, 3, true);
+                    armorbuilder.getArmor().get("boots").setItemMeta(bootmeta);
 
-                    chestplatemeta.setUnbreakable(true);
-                    helmetmeta.setUnbreakable(true);
-                    bootmeta.setUnbreakable(true);
-                    leggingsmeta.setUnbreakable(true);
-
-                    leggingsmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                    helmetmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                    chestplatemeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                    bootmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-
-                    bootmeta.setDisplayName(ChatColor.BLUE + "Water Boots");
-                    chestplatemeta.setDisplayName(ChatColor.BLUE + "Water Chestplate");
-                    leggingsmeta.setDisplayName(ChatColor.BLUE + "Water Leggings");
-                    helmetmeta.setDisplayName(ChatColor.BLUE + "Water Helmet");
-
-                    ArrayList<String> armorlore = new ArrayList<>();
-                    armorlore.add("Level: 1");
-                    armorlore.add("Exp: 0");
-                    armorlore.add("Aquaman!");
-
-                    bootmeta.setLore(armorlore);
-                    chestplatemeta.setLore(armorlore);
-                    leggingsmeta.setLore(armorlore);
-                    helmetmeta.setLore(armorlore);
-
-                    boots.setItemMeta(bootmeta);
-                    chestplate.setItemMeta(chestplatemeta);
-                    leggings.setItemMeta(leggingsmeta);
-                    helmet.setItemMeta(helmetmeta);
-
-                    player.getInventory().addItem(helmet);
-                    player.getInventory().addItem(chestplate);
-                    player.getInventory().addItem(leggings);
-                    player.getInventory().addItem(boots);
+                    armorbuilder.givePlayer(player);
                 }
             }else {
                 player.sendMessage(ChatColor.DARK_RED + "You don't have the Permission to get the Emerald Armor!");
@@ -97,5 +48,30 @@ public class WasserArmor implements CommandExecutor {
 
 
         return true;
+    }
+
+    @Override
+    public Color getColor() {
+        return Color.BLUE;
+    }
+
+    @Override
+    public String getHelmetOwner() {
+        return "21Stefage";
+    }
+
+    @Override
+    public String getName() {
+        return "Water";
+    }
+
+    @Override
+    public HashMap<Enchantment, Integer> getCustomEnchants() {
+        return new HashMap<Enchantment, Integer>(){{put(Enchantment.DEPTH_STRIDER, 3);}};
+    }
+
+    @Override
+    public String getLore() {
+        return "Aquaman!";
     }
 }

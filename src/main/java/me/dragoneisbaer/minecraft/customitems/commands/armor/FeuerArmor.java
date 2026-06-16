@@ -15,8 +15,10 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-public class FeuerArmor implements CommandExecutor {
+public class FeuerArmor extends ArmorTemplate implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -26,62 +28,11 @@ public class FeuerArmor implements CommandExecutor {
             Player player = (Player) sender;
             if (player.hasPermission("customitems.getfirearmor")) {
                 if (args.length == 0) {
-                    ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
-                    ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE);
-                    ItemStack leggings = new ItemStack(Material.LEATHER_LEGGINGS);
-                    ItemStack helmet = new ItemStack(Material.PLAYER_HEAD);
 
-                    LeatherArmorMeta bootmeta = (LeatherArmorMeta) boots.getItemMeta();
-                    LeatherArmorMeta chestplatemeta = (LeatherArmorMeta) chestplate.getItemMeta();
-                    LeatherArmorMeta leggingsmeta = (LeatherArmorMeta) leggings.getItemMeta();
-                    SkullMeta helmetmeta = (SkullMeta) helmet.getItemMeta();
+                    ArmorBuilder armorbuilder = new ArmorBuilder();
+                    armorbuilder.setMeta(this);
 
-                    bootmeta.setColor(Color.RED);
-                    chestplatemeta.setColor(Color.RED);
-                    leggingsmeta.setColor(Color.RED);
-                    helmetmeta.setOwner("PrestonPlayz");
-
-                    helmetmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 6, true);
-                    chestplatemeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 6, true);
-                    bootmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 6, true);
-                    leggingsmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 6, true);
-
-                    chestplatemeta.setUnbreakable(true);
-                    helmetmeta.setUnbreakable(true);
-                    bootmeta.setUnbreakable(true);
-                    leggingsmeta.setUnbreakable(true);
-
-
-                    leggingsmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                    helmetmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                    chestplatemeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                    bootmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-
-                    bootmeta.setDisplayName(ChatColor.RED + "Fire Boots");
-                    chestplatemeta.setDisplayName(ChatColor.RED + "Fire Chestplate");
-                    leggingsmeta.setDisplayName(ChatColor.RED + "Fire Leggings");
-                    helmetmeta.setDisplayName(ChatColor.RED + "Fire Helmet");
-
-                    ArrayList<String> armorlore = new ArrayList<>();
-                    armorlore.add("Laufe in und über Feuer!");
-                    armorlore.add(0,"Level: 1");
-                    armorlore.add(1, "Exp: 0");
-
-
-                    bootmeta.setLore(armorlore);
-                    chestplatemeta.setLore(armorlore);
-                    leggingsmeta.setLore(armorlore);
-                    helmetmeta.setLore(armorlore);
-
-                    boots.setItemMeta(bootmeta);
-                    chestplate.setItemMeta(chestplatemeta);
-                    leggings.setItemMeta(leggingsmeta);
-                    helmet.setItemMeta(helmetmeta);
-
-                    player.getInventory().addItem(helmet);
-                    player.getInventory().addItem(chestplate);
-                    player.getInventory().addItem(leggings);
-                    player.getInventory().addItem(boots);
+                    armorbuilder.givePlayer(player);
                 }
             }else {
                 player.sendMessage(ChatColor.DARK_RED + "You don't have the Permission to get the Emerald Armor!");
@@ -92,5 +43,30 @@ public class FeuerArmor implements CommandExecutor {
 
 
         return true;
+    }
+
+    @Override
+    public Color getColor() {
+        return Color.RED;
+    }
+
+    @Override
+    public String getHelmetOwner() {
+        return "PrestonPlayz";
+    }
+
+    @Override
+    public String getName() {
+        return "Fire";
+    }
+
+    @Override
+    public HashMap<Enchantment, Integer> getCustomEnchants() {
+        return null;
+    }
+
+    @Override
+    public String getLore() {
+        return "Laufe in und über Feuer!";
     }
 }
