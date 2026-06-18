@@ -49,7 +49,7 @@ public class WasserArmor extends ArmorTemplate implements CommandExecutor {
 
     @Override
     public String getHelmetOwner() {
-        return "21Stefage";
+        return "33581684ab415141959daa10539ae6ff0526246dc03d5e1d74479b0325516e5c";
     }
 
     @Override

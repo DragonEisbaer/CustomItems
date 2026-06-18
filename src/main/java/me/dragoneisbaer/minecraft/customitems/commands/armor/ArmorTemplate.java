@@ -9,6 +9,12 @@ import java.util.HashMap;
 public abstract class ArmorTemplate {
 
     public abstract Color getColor();
+
+    /**
+     * Returns the hash of the player who owns the helmet
+     * got hash from <a href="https://minecraft-heads.com">Minecraft Heads</a>
+     * @return the hash of the player who owns the helmet
+     */
     public abstract String getHelmetOwner();
     public abstract String getName();
     public abstract HashMap<Enchantment, Integer> getCustomEnchants();

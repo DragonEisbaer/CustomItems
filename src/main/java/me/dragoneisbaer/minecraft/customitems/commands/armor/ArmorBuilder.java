@@ -1,5 +1,7 @@
 package me.dragoneisbaer.minecraft.customitems.commands.armor;
 
+import org.bukkit.Server;
+import org.bukkit.profile.PlayerProfile;
 import me.dragoneisbaer.minecraft.customitems.CustomItems;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,7 +14,10 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.profile.PlayerTextures;
 
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.*;
 
 public class ArmorBuilder {
@@ -54,34 +59,47 @@ public class ArmorBuilder {
         LeatherArmorMeta leggingsmeta = (LeatherArmorMeta) leggings.getItemMeta();
         SkullMeta helmetmeta = (SkullMeta) helmet.getItemMeta();
 
-        Map<String, LeatherArmorMeta> map = new HashMap<>();
-        map.put("chestplate", chestplatemeta);
-        map.put("leggings", leggingsmeta);
-        map.put("boots", bootmeta);
+        Map<String, LeatherArmorMeta> metaMap = new HashMap<>();
+        metaMap.put("chestplate", chestplatemeta);
+        metaMap.put("leggings", leggingsmeta);
+        metaMap.put("boots", bootmeta);
 
         helmetmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 6, true);
-        map.forEach((name, meta) -> {meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 6, true);});
+        metaMap.forEach((name, meta) -> meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 6, true));
         if (type.getCustomEnchants() != null) {
-            map.forEach((name, meta) -> {
+            metaMap.forEach((name, meta) -> {
                 type.getCustomEnchants().forEach((enchant, level )-> {
                     meta.addEnchant(enchant, level, true);
                 });
             });
         }
 
-        map.forEach((name, meta) -> {meta.setUnbreakable(true);});
+        metaMap.forEach((name, meta) -> {meta.setUnbreakable(true);});
         helmetmeta.setUnbreakable(true);
 
-        map.forEach((name, meta) -> {meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);});
+        metaMap.forEach((name, meta) -> {meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);});
         helmetmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
-        map.forEach((name, meta) -> {meta.setColor(type.getColor());});
+        metaMap.forEach((name, meta) -> {meta.setColor(type.getColor());});
 
         if (type.getHelmetOwner() != null) {
-            helmetmeta.setOwningPlayer(Bukkit.getOfflinePlayer(type.getHelmetOwner()));
+
+            Server server = Bukkit.getServer();
+            PlayerProfile profile = server.createPlayerProfile(UUID.randomUUID(),type.getName());
+            PlayerTextures textures = profile.getTextures();
+
+            try {
+                String fullUrl = "https://textures.minecraft.net/texture/" + type.getHelmetOwner();
+                textures.setSkin(URI.create(fullUrl).toURL());
+                profile.setTextures(textures);
+            } catch (MalformedURLException e) {
+                throw new RuntimeException("Error while creating URL", e);
+            }
+
+            helmetmeta.setOwnerProfile(profile);
         }
 
-        map.forEach((name, meta) -> meta.setDisplayName(type.getName() + " " + name.substring(0, 1).toUpperCase() + name.substring(1)));
+        metaMap.forEach((name, meta) -> meta.setDisplayName(type.getName() + " " + name.substring(0, 1).toUpperCase() + name.substring(1)));
 
         ArrayList<String> armorlore = new ArrayList<>();
 
@@ -90,9 +108,12 @@ public class ArmorBuilder {
         armorlore.add("Level: 1");
         armorlore.add("Exp: 0");
 
-        map.forEach((name, meta) -> meta.setLore(armorlore));
+        helmetmeta.setLore(armorlore);
+        metaMap.forEach((name, meta) -> meta.setLore(armorlore));
 
-        armor.forEach((name, item) -> {item.setItemMeta(map.get(name));});
+        armor.forEach((name, item) -> {item.setItemMeta(metaMap.get(name));});
+        armor.get("helmet").setItemMeta(helmetmeta);
+
     }
 
     public HashMap<String, ItemStack> getArmor() {

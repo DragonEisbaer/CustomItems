@@ -48,7 +48,7 @@ public class FeuerArmor extends ArmorTemplate implements CommandExecutor {
 
     @Override
     public String getHelmetOwner() {
-        return "PrestonPlayz";
+        return "a2d4521f2c449ea8751474647c2f22139f53a05a786634d2b5612d6a78e2b3fb";
     }
 
     @Override
