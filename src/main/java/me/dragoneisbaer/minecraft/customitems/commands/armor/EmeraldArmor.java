@@ -1,6 +1,5 @@
 package me.dragoneisbaer.minecraft.customitems.commands.armor;
 
-import it.unimi.dsi.fastutil.Hash;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -9,12 +8,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.RecipeChoice;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class EmeraldArmor extends ArmorTemplate implements CommandExecutor {
@@ -27,10 +24,8 @@ public class EmeraldArmor extends ArmorTemplate implements CommandExecutor {
             Player player = (Player) sender;
             if (player.hasPermission("customitems.getemeraldarmor")) {
                 if (args.length == 0) {
-
                     ArmorBuilder armorbuilder = new ArmorBuilder();
-                    armorbuilder.setMeta(this);
-
+                    armorbuilder.createArmor(this);
                     armorbuilder.givePlayer(player);
                 }
             }else {
@@ -67,5 +62,22 @@ public class EmeraldArmor extends ArmorTemplate implements CommandExecutor {
     @Override
     public String getLore() {
         return "Du wirst zum Sparfuchs!";
+    }
+
+    @Override
+    public HashMap<Character, RecipeChoice.ExactChoice> getMaterials() {
+        HashMap<Character, RecipeChoice.ExactChoice> map = new HashMap<>();
+        map.put('E', new RecipeChoice.ExactChoice(new ItemStack(Material.EMERALD)));
+        return map;
+    }
+
+    @Override
+    public HashMap<String, String[]> getRecipeShapes() {
+        HashMap<String, String[]> map = new HashMap<>();
+        map.put("helmet", new String[] {"EEE", "E E", "   "});
+        map.put("chestplate", new String[] {"E E", "EEE", "EEE"});
+        map.put("leggings", new String[] {"EEE", "E E", "E E"});
+        map.put("boots", new String[] {"   ", "E E", "E E"});
+        return map;
     }
 }

@@ -8,15 +8,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.RecipeChoice;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class FeuerArmor extends ArmorTemplate implements CommandExecutor {
 
@@ -30,7 +26,7 @@ public class FeuerArmor extends ArmorTemplate implements CommandExecutor {
                 if (args.length == 0) {
 
                     ArmorBuilder armorbuilder = new ArmorBuilder();
-                    armorbuilder.setMeta(this);
+                    armorbuilder.createArmor(this);
 
                     armorbuilder.givePlayer(player);
                 }
@@ -68,5 +64,23 @@ public class FeuerArmor extends ArmorTemplate implements CommandExecutor {
     @Override
     public String getLore() {
         return "Laufe in und über Feuer!";
+    }
+
+    @Override
+    public HashMap<Character, RecipeChoice.ExactChoice> getMaterials() {
+        HashMap<Character, RecipeChoice.ExactChoice> map = new HashMap<>();
+        map.put('B', new RecipeChoice.ExactChoice(new ItemStack(Material.BLAZE_POWDER)));
+        map.put('F', new RecipeChoice.ExactChoice(new ItemStack(Material.FIRE_CHARGE)));
+        return map;
+    }
+
+    @Override
+    public HashMap<String, String[]> getRecipeShapes() {
+        HashMap<String, String[]> map = new HashMap<>();
+        map.put("helmet", new String[] {"BBB", "B B", "   "});
+        map.put("chestplate", new String[] {"B B", "BFB", "BBB"});
+        map.put("leggings", new String[] {"BBB", "B B", "B B"});
+        map.put("boots", new String[] {"   ", "B B", "F F"});
+        return map;
     }
 }

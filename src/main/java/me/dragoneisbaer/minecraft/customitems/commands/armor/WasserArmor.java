@@ -8,14 +8,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class WasserArmor extends ArmorTemplate implements CommandExecutor {
@@ -30,13 +28,7 @@ public class WasserArmor extends ArmorTemplate implements CommandExecutor {
                 if (args.length == 0) {
 
                     ArmorBuilder armorbuilder = new ArmorBuilder();
-                    armorbuilder.setMeta(this);
-
-                    ItemMeta bootmeta = armorbuilder.getArmor().get("boots").getItemMeta();
-
-                    bootmeta.addEnchant(Enchantment.DEPTH_STRIDER, 3, true);
-                    armorbuilder.getArmor().get("boots").setItemMeta(bootmeta);
-
+                    armorbuilder.createArmor(this);
                     armorbuilder.givePlayer(player);
                 }
             }else {
@@ -73,5 +65,32 @@ public class WasserArmor extends ArmorTemplate implements CommandExecutor {
     @Override
     public String getLore() {
         return "Aquaman!";
+    }
+
+    @Override
+    public HashMap<Character, RecipeChoice.ExactChoice> getMaterials() {
+        HashMap<Character, RecipeChoice.ExactChoice> map = new HashMap<>();
+
+        ItemStack bottle = new ItemStack(Material.POTION, 1);
+        PotionMeta pmeta = (PotionMeta) bottle.getItemMeta();
+        pmeta.setBasePotionType(PotionType.WATER);
+        bottle.setItemMeta(pmeta);
+
+        map.put('W', new RecipeChoice.ExactChoice(bottle));
+        map.put('H', new RecipeChoice.ExactChoice(new ItemStack(Material.HEART_OF_THE_SEA)));
+
+        return map;
+    }
+
+    @Override
+    public HashMap<String, String[]> getRecipeShapes() {
+        HashMap<String, String[]> map = new HashMap<>();
+
+        map.put("helmet", new String[] {"WWW", "W W", "   "});
+        map.put("chestplate", new String[] {"W W", "WHW", "WWW"});
+        map.put("leggings", new String[] {"WWW", "W W", "W W"});
+        map.put("boots", new String[] {"   ", "W W", "H H"});
+
+        return map;
     }
 }
