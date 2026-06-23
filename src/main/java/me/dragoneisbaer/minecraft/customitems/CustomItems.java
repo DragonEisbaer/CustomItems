@@ -26,6 +26,8 @@ public final class CustomItems extends JavaPlugin {
         ArmorBuilder buildWater = new ArmorBuilder(new WasserArmor(), true);
         ArmorBuilder buildFire = new ArmorBuilder(new FeuerArmor(), true);
 
+        cleanup();
+
         getServer().getPluginManager().registerEvents(new EmeraldArmorEffekt(), this);
         getServer().getPluginManager().registerEvents(new FeuerArmorEffekt(), this);
         getServer().getPluginManager().registerEvents(new WasserArmorEffekt(), this);
@@ -40,5 +42,9 @@ public final class CustomItems extends JavaPlugin {
 
     public static CustomItems getInstance() {
         return instance;
+    }
+
+    private void cleanup() {
+        System.gc();
     }
 }

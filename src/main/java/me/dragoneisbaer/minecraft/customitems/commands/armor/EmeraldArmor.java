@@ -46,7 +46,7 @@ public class EmeraldArmor extends ArmorTemplate implements CommandExecutor {
 
     @Override
     public String getHelmetOwner() {
-        return null;
+        return "2818e7957089e44d2c79d6b1405928e16351e51d6fea83506def6d5cac429ca1";
     }
 
     @Override
